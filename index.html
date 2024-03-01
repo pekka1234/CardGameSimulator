@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Korttipelisimulaattori</title>
+    </head>
+
+    <body>
+        <div id="aloitus">
+            <h1>Korttipeli Simulaattori</h1>
+            <button onclick="katku()">Katku</button>
+        </div>
+
+        <div id="katku">
+            <div id="tilanne">
+                <h1>Tilanne</h1>
+                <h2 id="kierros">Kierros 0</h2>
+                <h2 id="omavoitot">Sinä:</h2>
+                <h2 id="vasvoitot">Vastustaja:</h2>
+            </div>
+            <div id="tietokone">
+                <img id ="vas1" class="omakortti" src="cards/back.svg">
+                <img id ="vas2" class="omakortti" src="cards/back.svg">
+                <img id ="vas3" class="omakortti" src="cards/back.svg">
+                <img id ="vas4" class="omakortti" src="cards/back.svg">
+                <img id ="vas5" class="omakortti" src="cards/back.svg">
+            </div>
+            <div id="pelitilanne">
+                <h1 id="vuoro">Jonkun vuoro</h1>
+                <h1 id="tapahtuma"></h1>
+            </div>
+            <div id="pelaaja">
+                <img id="oma1" class="omakortti" onclick="pelaakortti(0)">
+                <img id="oma2" class="omakortti" onclick="pelaakortti(1)">
+                <img id="oma3" class="omakortti" onclick="pelaakortti(2)">
+                <img id="oma4" class="omakortti" onclick="pelaakortti(3)">
+                <img id="oma5" class="omakortti" onclick="pelaakortti(4)">
+            </div>
+        </div>
+    </body>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="katku.js"></script>
+    <script src="main.js"></script>
+</html>

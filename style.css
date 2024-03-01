@@ -1,0 +1,48 @@
+#katku{
+    display: none;
+}
+
+#tietokone{
+    text-align: center;
+    width: 70%;
+    height: 30%;
+    position: absolute;
+    top: 2%;
+    left: 15%;
+    background-color: #034518;
+}
+
+#pelaaja{
+    text-align: center;
+    width: 70%;
+    height: 30%;
+    position: absolute;
+    bottom: 2%;
+    left: 15%;    
+    background-color: #034518;
+}
+
+body{
+    overflow: hidden;
+}
+
+.omakortti{
+    height: 100%;
+    width: auto;
+    position: relative;
+    top: 0%;
+    margin-left: 2%;
+}
+
+#pelitilanne{
+    width: 20%;
+    height: 20%;
+    position: absolute;
+    top: 40%;
+    left: 42%;
+}
+
+#tilanne{
+    position: absolute;
+    top: 35%;
+}
