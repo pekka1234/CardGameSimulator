@@ -23,6 +23,8 @@ var kierros = 0;
 var voitot = [0, 0];
 var nimet = ["", "Tikki", "Korvat", "Voittaja"];
 
+var vaikeus;
+
 // Korttien arpominen ja jako pakasta
 function jaa(){
     // Käytetyt kortit lista
@@ -175,8 +177,12 @@ function vuorotiedotus(vuorotieto){
         document.getElementById("vuoro").innerHTML = "Sinun vuoro";
     }else if(vuorotieto == 2){
         document.getElementById("vuoro").innerHTML = "Vastustajan vuoro";
-        // Pistetään alkeellinen vastustaja funktio liikkeelle sekunnin viiveellä
-        setTimeout(function(){alkeellinen_tietokone();}, 1000);
+        // Katsotaan, että pelataanko vaikealla vai helpolla tasolla ja pistetään funktio liikkeelle
+        if(vaikeus == 0){
+            setTimeout(function(){alkeellinen_tietokone();}, 1000);
+        }else{
+            setTimeout(function(){haastava_tietokone();}, 1000);
+        }
     }
 }
 
@@ -202,9 +208,9 @@ function kaikkiarvonta(){
 var lask = 1;
 function alkeellinen_tietokone(){
     var vuoronyt = 0;
+    var valkortti = [0, 0];
     // Jos kyseessä on puolustus
     if(vaspuohuo == 1){
-        var valkortti = [0, 0];
         // Jos omistaa kysyttyä maata
         if(sumArray(vas[omaviime[0]]) > 0){  
             valkortti[0] = omaviime[0];
@@ -213,7 +219,7 @@ function alkeellinen_tietokone(){
             var temp = 0;
             while(true){
                 temp = getRandomInt(0, vas[omaviime[0]].length - 1);
-                if(vas[omaviime[0]][temp] != 0){
+                if(vas[omaviime[0]][temp] != "!"){
                     break;
                 }
             }
@@ -246,11 +252,33 @@ function alkeellinen_tietokone(){
         console.log("VIHOLLINEN HYÖKKÄÄ");
     }
 
-    console.log("Vihollisen kortti: ", valkortti);
+    tietokone_loppu(valkortti, vuoronyt);
 
+}
+
+// Korttimäärät ja voittokataus pitää tehdä funktioksi koodirivien säästämisen vuoksi
+
+// Pienin kortti tietokoneelta
+function pieninkatsaus(){
+    // Jos ei omista kysyttyä maata
+    var pienin = [0, 15];
+
+    // Katsotaan pienin kortti itseltä
+    for(var i = 0; i < 4; i++){
+        for(var j = 0; j < vas[i].length; j++){
+            if(vas[i][j] < pienin[1]){
+                pienin = [i, vas[i][j]];
+            }
+        }
+    }
+
+    return pienin;
+}
+
+function tietokone_loppu(valkortti, vuoronyt){
     // Kortin virallinen pelaus
     vasviime = valkortti;
-    vas[valkortti[0]][vas[valkortti[0]].indexOf(valkortti[1])] = 0;
+    vas[valkortti[0]].splice([vas[valkortti[0]].indexOf(valkortti[1])], 1);
 
     // Visuaalinen näyttö
     document.getElementById("vas" + (lask).toString()).style.position = "absolute";
@@ -276,10 +304,60 @@ function alkeellinen_tietokone(){
             kierrostapahtuma(0);
         }
     }
-
 }
 
-// Seuraavaksi kehittyneempi tietokone vastustaja
+// Kehittyneempi tietokone vastustaja
+function haastava_tietokone(){
+    var vuoronyt = 0;
+    var valkortti = [0, 0];
+
+    // Jos kyseessä on puolustus
+    if(vaspuohuo == 1){
+        // Jos omistaa kysyttyä maata
+        if(sumArray(vas[omaviime[0]]) > 0){
+            // Valitaan kortti tästä maasta
+            valkortti[0] = omaviime[0];
+            // Katsotaan, että millä korteilla saa kiinni
+            var isommat = [];
+            for(var i = 0; i < vas[omaviime[0]].length; i++){
+                if(vas[omaviime[0]][i] > omaviime[1]){
+                    isommat.push(vas[omaviime[0]][i]);
+                }
+            }
+            console.log(isommat);
+
+            // Jos on isompia kortteja, isommista korteista valitaan pienin, jos ei, niin pienimmistä korteista valitaan pienin
+            if(isommat.length > 0){
+                valkortti[1] = Array.min(isommat);
+                console.log("VIHOLLINEN VOITTI SAMALLA MAALLA");
+                vaspuohuo = 0;
+                vuoronyt = 2;
+            }else{
+                valkortti[1] = Array.min(vas[omaviime[0]]);
+                console.log("VIHOLLINEN HÄVISI SAMALLA MAALLA");
+                puohuo = 0;
+                vuoronyt = 1;
+            }
+
+            console.log(valkortti);
+        }else{
+            valkortti = pieninkatsaus();
+            console.log(valkortti);
+            console.log("VIHOLLINEN PISTÄÄ PIENIMMÄN KORTIN KOSKA EI OMISTA MAATA");
+            vuoronyt = 1;
+            puohuo = 0;
+        }
+    }else{
+        valkortti = pieninkatsaus();
+        console.log(valkortti);     
+        console.log("VIHOLLINEN PISTÄÄ PIENIMMÄN KORTIN KOSKA HYÖKKÄÄ");
+        vuoronyt = 1;
+        puohuo = 1;   
+    }
+
+    tietokone_loppu(valkortti, vuoronyt);
+
+}
 
 // Hallinnoi kierrosten vaihtumista
 function kierrostapahtuma(voittaja){
@@ -336,3 +414,8 @@ function kierrostapahtuma(voittaja){
         
     }, 1000);
 }
+
+function tietokonehaastavuus(vaikeustaso){
+    vaikeus = vaikeustaso;
+}
+

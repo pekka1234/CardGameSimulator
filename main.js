@@ -5,6 +5,7 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// Summa lista elementeistä
 function sumArray(array) {
     for (
       var
@@ -17,14 +18,20 @@ function sumArray(array) {
     return sum;
 }
 
+// Listan pienin numero
+Array.min = function( array ){
+    return Math.min.apply( Math, array );
+};
+
   
 // Katku pelin hallinta
-function katku(){
+function katku(vaikeustaso){
     // Vaihtaa aloitusvalikosta katku peliin
     document.getElementById("aloitus").style.display = "none";
     document.getElementById("katku").style.display = "block";
     document.body.style.backgroundColor = "#047a29";
 
+    // Asettaa visuaalisesti kortteja
     for(var i = 1; i < 6; i++){
         document.getElementById("vas" + i.toString()).style.position = "absolute";
         document.getElementById("vas" + i.toString()).style.top = "0%";
@@ -34,6 +41,9 @@ function katku(){
         document.getElementById("oma" + i.toString()).style.top = "0%";
         document.getElementById("oma" + i.toString()).style.left = (i * 15 - 10).toString() + "%";
     }
+
+    // Lähettää tiedon vaikeustasosta eteenpäin
+    tietokonehaastavuus(vaikeustaso);
 
     // Jakaa kortit
     jaa();
