@@ -19,7 +19,7 @@ var omaviime = [0, 0];
 var korttimaarat = [0, 0];
 
 // Kierrosjärjestelmään
-var kierros = 0;
+var kierros = 1;
 var voitot = [0, 0];
 var nimet = ["", "Tikki", "Korvat", "Voittaja"];
 
@@ -29,6 +29,12 @@ var vaikeus;
 function jaa(){
     // Käytetyt kortit lista
     var used = [];
+
+    // Viusaalisten asiodien asettelu sitä varten, että tämä peli on samassa sessiossa edellisten kanssa pelaa uudestaan napin vuoksi
+    document.getElementById("kierros").innerHTML = "Kierros " + kierros;
+    document.getElementById("tapahtuma").style.fontSize = "1.5em";
+    document.getElementById("tapahtuma").style.top = "33.5%";
+    document.getElementById("vuoro").style.display = "block";
 
     // Lisää kymmenen korttia, viisi itselle, loput viisi koneelle
     for(var i = 0; i < 10; i++){
@@ -152,6 +158,7 @@ function pelaakortti(num){
         // Voiton ja häivön katsominen puolustus/hyökkäys tietojen perusteella
         korttimaarat[0] += 1;
         if(korttimaarat[0] == 5 && korttimaarat[1] == 5){
+            document.getElementById("tapahtuma").innerHTML = "Erä vaihtuu";
             if(puohuo == 0){
                 console.log("OMA VOITTI");
                 document.getElementById("vuoro").innerHTML = "Voitit";
@@ -162,6 +169,7 @@ function pelaakortti(num){
                 kierrostapahtuma(1);
             }
         }
+
     }
 
     
@@ -175,6 +183,11 @@ function vuorotiedotus(vuorotieto){
     // Laitetaan vuoron teksti näkyviin
     if(vuorotieto == 1){
         document.getElementById("vuoro").innerHTML = "Sinun vuoro";
+        if(puohuo == 0){
+            document.getElementById("tapahtuma").innerHTML = "Sinä hyökkäät";
+        }else{
+            document.getElementById("tapahtuma").innerHTML = "Sinä vastaat";
+        }
     }else if(vuorotieto == 2){
         document.getElementById("vuoro").innerHTML = "Vastustajan vuoro";
         // Katsotaan, että pelataanko vaikealla vai helpolla tasolla ja pistetään funktio liikkeelle
@@ -182,6 +195,11 @@ function vuorotiedotus(vuorotieto){
             setTimeout(function(){alkeellinen_tietokone();}, 1000);
         }else{
             setTimeout(function(){haastava_tietokone();}, 1000);
+        }
+        if(vaspuohuo == 0){
+            document.getElementById("tapahtuma").innerHTML = "Vastustaja hyökkää";
+        }else{
+            document.getElementById("tapahtuma").innerHTML = "Vastustaja vastaa";
         }
     }
 }
@@ -300,6 +318,7 @@ function tietokone_loppu(valkortti, vuoronyt){
     // Voiton ja häviön katsominen puolustus/hyökkäys tietoejn perusteella
     korttimaarat[1] += 1;
     if(korttimaarat[0] == 5 && korttimaarat[1] == 5){
+        document.getElementById("tapahtuma").innerHTML = "Erä vaihtuu";
         if(vaspuohuo == 0){
             console.log("TIETOKONE VOITTI");
             document.getElementById("vuoro").innerHTML = "Hävisit";
@@ -365,6 +384,21 @@ function haastava_tietokone(){
 
 }
 
+function riviin(){
+    for(var i = 1; i < 6; i++){
+        document.getElementById("oma" + i.toString()).style.display = "block";
+        document.getElementById("oma" + i.toString()).style.position = "absolute";
+        document.getElementById("oma" + i.toString()).style.top = "0%";
+        document.getElementById("oma" + i.toString()).style.left = (i * 15 - 10).toString() + "%";
+
+        document.getElementById("vas" + i.toString()).style.display = "block";
+        document.getElementById("vas" + i.toString()).style.position = "absolute";
+        document.getElementById("vas" + i.toString()).style.top = "0%";
+        document.getElementById("vas" + i.toString()).style.left = (i * 15 - 10).toString() + "%";
+        document.getElementById("vas" + i.toString()).src = "cards/back.svg";
+    }
+}
+
 // Hallinnoi kierrosten vaihtumista
 function kierrostapahtuma(voittaja){
     // Odottaa sekunnin kierrosten välissä, jotta "voitit" tai "hävisit" ruutu kierrosten välissä ehtii näkyä
@@ -392,37 +426,54 @@ function kierrostapahtuma(voittaja){
 
         // Laitetaan kortit takaisin riviin
         if(voitot[0] != 3 && voitot[1] != 3){
-            for(var i = 1; i < 6; i++){
-                document.getElementById("oma" + i.toString()).style.display = "block";
-                document.getElementById("oma" + i.toString()).style.position = "absolute";
-                document.getElementById("oma" + i.toString()).style.top = "0%";
-                document.getElementById("oma" + i.toString()).style.left = (i * 15 - 10).toString() + "%";
+            riviin();
+            // Jaetaan pakka
+            jaa();
 
-                document.getElementById("vas" + i.toString()).style.display = "block";
-                document.getElementById("vas" + i.toString()).style.position = "absolute";
-                document.getElementById("vas" + i.toString()).style.top = "0%";
-                document.getElementById("vas" + i.toString()).style.left = (i * 15 - 10).toString() + "%";
-                document.getElementById("vas" + i.toString()).src = "cards/back.svg";
-            }
         }else{
             document.getElementById("vuoro").style.display = "none";
             document.getElementById("tapahtuma").style.position = "absolute";
             document.getElementById("tapahtuma").style.top = "-5%";
+            document.getElementById("tapahtuma").style.fontSize = "2em";
+            document.getElementById("uudestaan").style.display = "block";
             if(voitot[0] == 3){
                 document.getElementById("tapahtuma").innerHTML = "Voitit pelin";
             }else{
                 document.getElementById("tapahtuma").innerHTML = "Hävisit pelin";
             }
         }
-
-        // Jaetaan pakka
-        jaa();
         
     }, 1000);
 }
 
 function tietokonehaastavuus(vaikeustaso){
     vaikeus = vaikeustaso;
+}
+
+// Pelaa uudestaan napin aikaansaama resetointi
+function resetkatku(){
+    oma = [[], [], [], []];
+    vas = [[], [], [], []];
+    omakoodit = [];
+    vaskoodit = [];
+    vuoro;
+    puohuo = 0;
+    vaspuohuo = 0;
+    vasviime = [0, 0];
+    omaviime = [0, 0];
+    korttimaarat = [0, 0];    
+    edel = [];
+    lask = 1;
+    kierros = 0;
+    voitot = [0, 0];
+
+    document.getElementById("uudestaan").style.display = "none";
+    document.getElementById("kierros").innerHTML = "Kierros " + kierros;
+    document.getElementById("omavoitot").innerHTML = "Sinä: " + nimet[voitot[0]];
+    document.getElementById("vasvoitot").innerHTML = "Vastustaja: " + nimet[voitot[1]];
+
+    riviin();
+    jaa();
 }
 
 //// MUISTIO /////
