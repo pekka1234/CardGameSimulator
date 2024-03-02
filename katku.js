@@ -266,8 +266,14 @@ function pieninkatsaus(){
     // Katsotaan pienin kortti itseltä
     for(var i = 0; i < 4; i++){
         for(var j = 0; j < vas[i].length; j++){
+            // Katsoo että jos löytää pienemmän kortin kuin edellinen pienin, se pistetään pienimmäksi
             if(vas[i][j] < pienin[1]){
                 pienin = [i, vas[i][j]];
+            // Jos kortti on yhtäsuuri, arvotaan että pistetäänkö sitä, jotta ei tule maapainotusta niiden järjestyksen mukaan
+            }else if(vas[i][j] == pienin[1]){
+                if(getRandomInt(1,2) == 1){
+                    pienin = [i, vas[i][j]];
+                }
             }
         }
     }
@@ -419,3 +425,9 @@ function tietokonehaastavuus(vaikeustaso){
     vaikeus = vaikeustaso;
 }
 
+//// MUISTIO /////
+/**
+ * Haastavampaan peliin voisi tehdä ominaisuuden, että jos on kaksi korttia jäljellä
+ * ja pitää pistää joku pois, ja tietää ettei vihollisella ole jotakin maata, niin pistää sen
+ * kortin pois, koska siitä ei tule olemaan hyötyö
+ */
