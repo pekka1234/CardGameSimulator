@@ -24,6 +24,12 @@
 
 body{
     overflow: hidden;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .omakortti{
@@ -53,7 +59,7 @@ body{
     display: none;
     width: 70%;
     height: 50%;
-    font-size: 2.5em;
+    font-size: 1.5em;
     background-color: #276139;
     border-style: dashed;
 }

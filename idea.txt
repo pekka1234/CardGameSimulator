@@ -1,0 +1,21 @@
+Korttipeli simulaattori html js css pohjalle
+
+Katku ensin, myöhemmin
+
+durak
+
+(vale)paskahousu
+
+pokeri
+
+https://fi.wikipedia.org/wiki/Luettelo_korttipeleist%C3%A4
+
+ansin täysina alkeelline barebones versio
+
+
+
+Katku monilla pelaajilla (voi olla haastavaa korttikoon kanssa)
+
+durak
+
+Pekka Kulmala peli
